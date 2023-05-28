@@ -1,9 +1,19 @@
 const database = require('../models')  //importando a parte de modelos
 
 class PessoaCcontroller {
+    static async pegaPessoasAtivas(req, res){
+        try{
+            const todsAsPesoasAtivas = await database.Pessoas.findAll()
+            return res.status(200).json(todsAsPesoasAtivas)
+        } catch (error) {
+            return res.status(500).json(error.message)
+        }
+        
+    }
+
     static async pegaTodasAsPessoas(req, res){
         try{
-            const todsAsPesoas = await database.Pessoas.findAll()
+            const todsAsPesoas = await database.Pessoas.scope('todos').findAll()
             return res.status(200).json(todsAsPesoas)
         } catch (error) {
             return res.status(500).json(error.message)
@@ -116,6 +126,16 @@ class PessoaCcontroller {
             })
             return res.status(200).json(`Matricula com o id: ${matriculaId} foi deletada`)
         }   catch (error) {
+            return res.status(500).json(error.message)
+        }
+    }
+
+    static async restauraPesoa(req, res){
+        const { id } = req.params
+        try {
+            await database.Pessoas.restore( {where: { id: Number(id) } } )
+            return res.status(200).json({ mensagem: `id ${id} restaurado`})
+        }catch (error) {
             return res.status(500).json(error.message)
         }
     }

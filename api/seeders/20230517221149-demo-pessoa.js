@@ -18,7 +18,7 @@ module.exports = {
       email: 'jose@josse.com',
       usuario: 'estudante',
       createdAt: new Date(),
-      updatedAt: new Date() 
+      updatedAt: new Date()
     }], {});
     
   },
